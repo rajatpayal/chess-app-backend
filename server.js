@@ -56,31 +56,29 @@ io.on('connection', (socket) => {
 });
   socket.on('acceptInvitation', ({ gameId, invitingPlayerId }) => {
 
-      const invitingPlayerId = userMap[invitingPlayerId];
-      const invitedPlayerId = socket.id;
+    const invitingPlayerSocketId = userMap[invitingPlayerId];
+    socket.join(gameId);
+    
+    io.to(invitingPlayerSocketId).emit('joinGameRoom', gameId);
 
       const playerRoles = {
         white: invitingPlayerSocketId, // Inviter plays as white
-        black: invitedPlayerSocketId  // Invitee plays as black
-    };
-      socket.join(gameId);
-      io.to(userMap[invitingPlayerId]).emit('joinGameRoom', {gameId,playerRoles});
-      console.log(invitingPlayerId);
-      console.log(gameId);
-    console.log('yha k to aya');
-
+        black: socket.id // Invitee plays as black
+      };
+     
+      
+      io.to(gameId).emit('startGame', { gameId, playerRoles });
+      // io.to(userMap[invitingPlayerId]).emit('joinGameRoom',gameId);
       const chess = new Chess();
-     activeGames[gameId]=chess;
-
-     console.log(activeGames[gameId]);
-    // io.to(gameId).emit('startGame', (`/game/${gameId}`));
+      activeGames[gameId]=chess;
+      // io.to('')
+      // io.to(gameId).emit('startGame', (`/game/${gameId}`));
   });
 
   socket.on('joinRoom', (gameId) => {
-    console.log('aaya to yha tk b tha');
+    console.log("dfgdfgbfdxzcvxzsdfswdgsdfgsd");
     socket.join(gameId);
     
-  
   });
   // socket.on('startGame', ({ gameId, opponentSocketId }) => {
   //   socket.join(gameId);
