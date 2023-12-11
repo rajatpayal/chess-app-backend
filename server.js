@@ -6,6 +6,13 @@ const { Chess } = require('chess.js');
 const cors = require('cors');
 const server = http.createServer(app);
 const { v4: uuidv4 } = require('uuid');
+const userRoutes = require('../chess-backend/routes/userRoutes');
+
+const mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost:27017/chessGame', { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
 
 
@@ -20,6 +27,11 @@ const io = socketIo(server, {
   }
 });
 app.use(express.json());
+
+
+app.use('/api/users', userRoutes);
+
+
 
 let userMap = {};
 let players = [];
