@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+// const AutoIncrementFactory = require('mongoose-sequence');
+// const AutoIncrement = AutoIncrementFactory(mongoose);
 
 const userSchema = new mongoose.Schema({
+    userId: {type:String},
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
@@ -13,5 +16,6 @@ userSchema.pre('save', async function(next) {
     }
     next();
 });
+// userSchema.plugin(AutoIncrement, { inc_field: 'playerid' });
 
 module.exports = mongoose.model('User', userSchema);
